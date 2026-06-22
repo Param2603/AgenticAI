@@ -8,10 +8,8 @@ import os
 import streamlit as st
 from dotenv import load_dotenv
 
-# ── Load .env ────────────────────────────────
 load_dotenv()
 
-# ── Page config (MUST be first Streamlit call) ───────────────────────────────
 st.set_page_config(
     page_title="Param Shah | Digital Twin",
     page_icon="🧑‍💻",
@@ -19,7 +17,6 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
@@ -28,91 +25,133 @@ st.markdown("""
       font-family: 'Space Grotesk', sans-serif;
   }
 
-  /* ── Background ── */
+  /* ══════════════════════════════════════
+     BACKGROUND
+  ══════════════════════════════════════ */
   .stApp {
-      background: linear-gradient(135deg, #0d0015 0%, #0a0020 40%, #00101a 100%);
-      color: #e2e8f0;
+      background: linear-gradient(135deg, #0f0c29 0%, #1a0533 40%, #0c1445 100%);
+      color: #f0e6ff;
   }
 
-  /* ── Sidebar ── */
+  /* ══════════════════════════════════════
+     SIDEBAR
+  ══════════════════════════════════════ */
   [data-testid="stSidebar"] {
-      background: linear-gradient(180deg, #0d0020 0%, #0a0030 60%, #001020 100%);
-      border-right: 1px solid rgba(139, 92, 246, 0.3);
+      background: linear-gradient(180deg, #0f0c29 0%, #1a0533 100%);
+      border-right: 1px solid rgba(168, 85, 247, 0.4);
   }
-
   [data-testid="stSidebar"] * {
-      color: #e2e8f0 !important;
+      color: #e9d5ff !important;
   }
-
-  /* ── Sidebar buttons (example questions) ── */
   [data-testid="stSidebar"] .stButton > button {
-      background: rgba(139, 92, 246, 0.1) !important;
-      border: 1px solid rgba(139, 92, 246, 0.35) !important;
-      color: #c4b5fd !important;
+      background: rgba(168, 85, 247, 0.12) !important;
+      border: 1px solid rgba(168, 85, 247, 0.4) !important;
+      color: #d8b4fe !important;
       border-radius: 8px !important;
       font-size: 0.78rem !important;
       transition: all 0.2s ease !important;
-      text-align: left !important;
   }
   [data-testid="stSidebar"] .stButton > button:hover {
-      background: rgba(139, 92, 246, 0.25) !important;
-      border-color: #8b5cf6 !important;
-      color: #fff !important;
-      transform: translateX(3px) !important;
+      background: rgba(168, 85, 247, 0.3) !important;
+      border-color: #a855f7 !important;
+      color: #ffffff !important;
+      transform: translateX(4px) !important;
+  }
+  [data-testid="stSidebar"] input {
+      background: rgba(168, 85, 247, 0.12) !important;
+      border: 1px solid rgba(168, 85, 247, 0.4) !important;
+      border-radius: 8px !important;
+      color: #f0e6ff !important;
   }
 
-  /* ── Clear button ── */
-  [data-testid="stSidebar"] .stButton:last-of-type > button {
-      background: rgba(239, 68, 68, 0.1) !important;
-      border: 1px solid rgba(239, 68, 68, 0.35) !important;
-      color: #fca5a5 !important;
-  }
-  [data-testid="stSidebar"] .stButton:last-of-type > button:hover {
-      background: rgba(239, 68, 68, 0.25) !important;
-  }
-
-  /* ── Chat messages ── */
-  [data-testid="stChatMessage"] {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(139, 92, 246, 0.15);
-      border-radius: 14px;
-      margin-bottom: 10px;
-      padding: 6px 10px;
-      backdrop-filter: blur(6px);
+  /* ══════════════════════════════════════
+     CHAT MESSAGES — ASSISTANT
+  ══════════════════════════════════════ */
+  [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]),
+  [data-testid="stChatMessage"]:nth-child(odd) {
+      background: linear-gradient(135deg, rgba(88,28,135,0.45), rgba(30,27,75,0.6)) !important;
+      border: 1px solid rgba(192, 132, 252, 0.35) !important;
+      border-radius: 16px !important;
+      margin-bottom: 12px !important;
+      padding: 10px 14px !important;
+      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15) !important;
   }
 
-  /* ── Chat input ── */
-  .stChatInputContainer textarea {
-      background: rgba(139, 92, 246, 0.07) !important;
-      border: 1px solid rgba(139, 92, 246, 0.4) !important;
-      border-radius: 12px !important;
-      color: #e2e8f0 !important;
+  /* ══════════════════════════════════════
+     CHAT MESSAGES — USER
+  ══════════════════════════════════════ */
+  [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]),
+  [data-testid="stChatMessage"]:nth-child(even) {
+      background: linear-gradient(135deg, rgba(6,78,59,0.4), rgba(4,47,46,0.55)) !important;
+      border: 1px solid rgba(52, 211, 153, 0.35) !important;
+      border-radius: 16px !important;
+      margin-bottom: 12px !important;
+      padding: 10px 14px !important;
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1) !important;
+  }
+
+  /* ══════════════════════════════════════
+     ALL CHAT TEXT — BRIGHT & READABLE
+  ══════════════════════════════════════ */
+  [data-testid="stChatMessage"] p,
+  [data-testid="stChatMessage"] span,
+  [data-testid="stChatMessage"] div,
+  [data-testid="stChatMessage"] li,
+  [data-testid="stChatMessage"] strong {
+      color: #f5f0ff !important;
+      font-size: 0.97rem !important;
+      line-height: 1.7 !important;
+  }
+  [data-testid="stChatMessage"] strong {
+      color: #e9d5ff !important;
+      font-weight: 700 !important;
+  }
+
+  /* ══════════════════════════════════════
+     CHAT INPUT BAR — FIX WHITE BAR
+  ══════════════════════════════════════ */
+  [data-testid="stBottom"],
+  [data-testid="stBottom"] > div,
+  .stChatInputContainer,
+  .stChatInputContainer > div {
+      background: linear-gradient(135deg, #0f0c29, #1a0533) !important;
+      border-top: 1px solid rgba(168, 85, 247, 0.3) !important;
+  }
+  .stChatInputContainer textarea,
+  [data-testid="stChatInputTextArea"] {
+      background: rgba(88, 28, 135, 0.25) !important;
+      border: 1px solid rgba(168, 85, 247, 0.5) !important;
+      border-radius: 14px !important;
+      color: #f0e6ff !important;
+      font-size: 0.97rem !important;
+      caret-color: #c084fc !important;
+  }
+  .stChatInputContainer textarea::placeholder {
+      color: #9f7aea !important;
+      opacity: 0.8 !important;
   }
   .stChatInputContainer textarea:focus {
-      border-color: #8b5cf6 !important;
-      box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2) !important;
+      border-color: #a855f7 !important;
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.25) !important;
+      outline: none !important;
   }
-
-  /* ── Launch button ── */
-  .stButton > button[kind="primary"] {
+  /* Send button */
+  [data-testid="stChatInputSubmitButton"] button {
       background: linear-gradient(135deg, #7c3aed, #06b6d4) !important;
       border: none !important;
-      color: white !important;
-      font-weight: 700 !important;
       border-radius: 10px !important;
-      font-size: 1rem !important;
-      padding: 0.6rem 1.2rem !important;
-      transition: all 0.3s ease !important;
-      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4) !important;
+      color: white !important;
   }
-  .stButton > button[kind="primary"]:hover {
-      transform: translateY(-2px) !important;
-      box-shadow: 0 8px 30px rgba(139, 92, 246, 0.6) !important;
+  [data-testid="stChatInputSubmitButton"] button:hover {
+      background: linear-gradient(135deg, #6d28d9, #0891b2) !important;
+      transform: scale(1.05) !important;
   }
 
-  /* ── Headings ── */
+  /* ══════════════════════════════════════
+     HEADINGS
+  ══════════════════════════════════════ */
   h1 {
-      background: linear-gradient(135deg, #a78bfa, #22d3ee, #a78bfa);
+      background: linear-gradient(135deg, #c084fc 0%, #67e8f9 50%, #c084fc 100%);
       background-size: 200%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -121,90 +160,91 @@ st.markdown("""
       animation: shimmer 4s linear infinite;
   }
   @keyframes shimmer {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 200% 50%; }
+      0% { background-position: 0%; }
+      100% { background-position: 200%; }
   }
-
   h2, h3 {
-      color: #a78bfa !important;
+      color: #c084fc !important;
       font-weight: 600 !important;
   }
 
-  /* ── Skill badges ── */
-  .skill-badge {
-      display: inline-block;
-      background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(6,182,212,0.15));
-      border: 1px solid rgba(139, 92, 246, 0.45);
-      color: #c4b5fd;
-      padding: 3px 11px;
-      border-radius: 20px;
-      font-size: 0.72rem;
-      margin: 2px 2px;
-      font-family: 'JetBrains Mono', monospace;
-      transition: all 0.2s ease;
-  }
-  .skill-badge:hover {
-      background: rgba(139, 92, 246, 0.35);
-      color: #fff;
+  /* ══════════════════════════════════════
+     GENERAL TEXT
+  ══════════════════════════════════════ */
+  p, span, li, label {
+      color: #e9d5ff !important;
   }
 
-  /* ── Tool badge (cyan) ── */
-  .tool-badge {
-      display: inline-block;
-      background: linear-gradient(135deg, rgba(6,182,212,0.2), rgba(16,185,129,0.15));
-      border: 1px solid rgba(6, 182, 212, 0.45);
-      color: #67e8f9;
-      padding: 3px 11px;
-      border-radius: 20px;
-      font-size: 0.72rem;
-      margin: 2px 2px;
-      font-family: 'JetBrains Mono', monospace;
-  }
-
-  /* ── Metric cards ── */
+  /* ══════════════════════════════════════
+     METRIC CARDS
+  ══════════════════════════════════════ */
   [data-testid="metric-container"] {
-      background: linear-gradient(135deg, rgba(139,92,246,0.12), rgba(6,182,212,0.08));
-      border: 1px solid rgba(139, 92, 246, 0.3);
-      border-radius: 12px;
-      padding: 10px;
+      background: linear-gradient(135deg, rgba(88,28,135,0.3), rgba(6,78,59,0.2)) !important;
+      border: 1px solid rgba(168, 85, 247, 0.4) !important;
+      border-radius: 12px !important;
+      padding: 10px !important;
   }
   [data-testid="metric-container"] label {
-      color: #a78bfa !important;
+      color: #c084fc !important;
       font-size: 0.75rem !important;
   }
   [data-testid="metric-container"] [data-testid="stMetricValue"] {
-      color: #22d3ee !important;
+      color: #67e8f9 !important;
       font-size: 0.95rem !important;
-      font-weight: 600 !important;
+      font-weight: 700 !important;
   }
 
-  /* ── Divider ── */
-  hr {
+  /* ══════════════════════════════════════
+     LAUNCH BUTTON
+  ══════════════════════════════════════ */
+  .stButton > button[kind="primary"] {
+      background: linear-gradient(135deg, #7c3aed 0%, #0891b2 100%) !important;
       border: none !important;
-      border-top: 1px solid rgba(139, 92, 246, 0.2) !important;
-      margin: 12px 0 !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+      border-radius: 12px !important;
+      font-size: 1rem !important;
+      padding: 0.7rem 1.5rem !important;
+      box-shadow: 0 4px 25px rgba(124, 58, 237, 0.5) !important;
+      transition: all 0.3s ease !important;
+  }
+  .stButton > button[kind="primary"]:hover {
+      transform: translateY(-3px) !important;
+      box-shadow: 0 8px 35px rgba(124, 58, 237, 0.7) !important;
   }
 
-  /* ── Status dot ── */
-  .status-dot {
-      width: 8px;
-      height: 8px;
-      background: #22c55e;
-      border-radius: 50%;
+  /* ══════════════════════════════════════
+     BADGES
+  ══════════════════════════════════════ */
+  .skill-badge {
       display: inline-block;
-      margin-right: 6px;
-      box-shadow: 0 0 8px #22c55e;
-      animation: pulse 2s infinite;
+      background: linear-gradient(135deg, rgba(124,58,237,0.25), rgba(139,92,246,0.15));
+      border: 1px solid rgba(192, 132, 252, 0.5);
+      color: #e9d5ff;
+      padding: 3px 11px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      margin: 2px;
+      font-family: 'JetBrains Mono', monospace;
   }
-  @keyframes pulse {
-      0%, 100% { opacity: 1; box-shadow: 0 0 8px #22c55e; }
-      50% { opacity: 0.5; box-shadow: 0 0 3px #22c55e; }
+  .tool-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, rgba(6,182,212,0.2), rgba(16,185,129,0.15));
+      border: 1px solid rgba(52, 211, 153, 0.45);
+      color: #6ee7b7;
+      padding: 3px 11px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      margin: 2px;
+      font-family: 'JetBrains Mono', monospace;
   }
 
-  /* ── Name card in sidebar ── */
+  /* ══════════════════════════════════════
+     NAME CARD
+  ══════════════════════════════════════ */
   .name-card {
-      background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(6,182,212,0.15));
-      border: 1px solid rgba(139, 92, 246, 0.4);
+      background: linear-gradient(135deg, rgba(88,28,135,0.35), rgba(6,78,59,0.25));
+      border: 1px solid rgba(192, 132, 252, 0.45);
       border-radius: 14px;
       padding: 14px 16px;
       margin-bottom: 10px;
@@ -213,58 +253,76 @@ st.markdown("""
   .name-card h2 {
       margin: 0 !important;
       font-size: 1.2rem !important;
-      background: linear-gradient(135deg, #a78bfa, #22d3ee);
+      background: linear-gradient(135deg, #c084fc, #34d399);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
   }
   .name-card p {
       margin: 4px 0 0 0 !important;
-      color: #94a3b8 !important;
+      color: #a78bfa !important;
       font-size: 0.78rem !important;
   }
 
-  /* ── Warning box ── */
-  .stAlert {
-      background: rgba(139, 92, 246, 0.1) !important;
-      border: 1px solid rgba(139, 92, 246, 0.35) !important;
-      border-radius: 10px !important;
-      color: #c4b5fd !important;
-  }
-
-  /* ── Text input in sidebar ── */
-  [data-testid="stSidebar"] input {
-      background: rgba(139, 92, 246, 0.1) !important;
-      border: 1px solid rgba(139, 92, 246, 0.35) !important;
-      border-radius: 8px !important;
-      color: #e2e8f0 !important;
-  }
-
-  /* ── Scrollbar ── */
-  ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.4); border-radius: 10px; }
-  ::-webkit-scrollbar-thumb:hover { background: #8b5cf6; }
-
-  /* ── Subtitle text ── */
-  .subtitle {
-      color: #94a3b8;
-      font-size: 1rem;
-      margin-top: -8px;
-  }
-
-  /* ── Header glow bar ── */
+  /* ══════════════════════════════════════
+     GLOW BAR & DIVIDER
+  ══════════════════════════════════════ */
   .glow-bar {
       height: 2px;
-      background: linear-gradient(90deg, transparent, #8b5cf6, #22d3ee, #8b5cf6, transparent);
+      background: linear-gradient(90deg, transparent, #a855f7, #22d3ee, #a855f7, transparent);
       border-radius: 2px;
-      margin: 8px 0 16px 0;
-      animation: glow-move 3s ease-in-out infinite;
+      margin: 6px 0 14px 0;
+      animation: glow-pulse 3s ease-in-out infinite;
   }
-  @keyframes glow-move {
-      0%, 100% { opacity: 0.6; }
+  @keyframes glow-pulse {
+      0%, 100% { opacity: 0.5; }
       50% { opacity: 1; }
   }
+  hr {
+      border: none !important;
+      border-top: 1px solid rgba(168, 85, 247, 0.25) !important;
+      margin: 12px 0 !important;
+  }
+
+  /* ══════════════════════════════════════
+     STATUS DOT
+  ══════════════════════════════════════ */
+  .status-dot {
+      width: 8px; height: 8px;
+      background: #34d399;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+      box-shadow: 0 0 8px #34d399;
+      animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 8px #34d399; }
+      50% { box-shadow: 0 0 2px #34d399; opacity: 0.6; }
+  }
+
+  /* ══════════════════════════════════════
+     SUBTITLE & WARNING
+  ══════════════════════════════════════ */
+  .subtitle {
+      color: #c4b5fd !important;
+      font-size: 1rem;
+      margin-top: -6px;
+  }
+  .stAlert {
+      background: rgba(88, 28, 135, 0.2) !important;
+      border: 1px solid rgba(168, 85, 247, 0.4) !important;
+      border-radius: 10px !important;
+      color: #e9d5ff !important;
+  }
+
+  /* ══════════════════════════════════════
+     SCROLLBAR
+  ══════════════════════════════════════ */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(168, 85, 247, 0.5); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: #a855f7; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -337,9 +395,9 @@ with st.sidebar:
 
     st.markdown("---")
     st.markdown(
-        '<div style="font-size:0.7rem; color:#64748b; text-align:center; line-height:1.6;">'
+        '<div style="font-size:0.7rem; color:#7c3aed; text-align:center; line-height:1.7;">'
         'Built with LangChain · Groq · Gemini · ChromaDB<br>'
-        '<span style="color:#7c3aed;">© 2024</span> Param Shah Digital Twin'
+        '<span style="color:#a78bfa;">© 2024 Param Shah Digital Twin</span>'
         '</div>',
         unsafe_allow_html=True,
     )
@@ -445,13 +503,11 @@ if st.session_state.agent_ready:
                     )
                 except Exception as e:
                     response = f"⚠️ Something went wrong: {e}\n\nPlease check your API keys and try again."
-
             st.markdown(response)
 
         st.session_state.messages.append({"role": "assistant", "content": response})
         st.session_state.chat_history.append({"role": "user", "content": user_input})
         st.session_state.chat_history.append({"role": "assistant", "content": response})
-
         st.rerun()
 else:
     if not (groq_key and gemini_key):
